@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Handsontable Example</title>
+    <!-- Handsontable CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="hot"></div>
+
+    <button onclick="exportToXLSX()">Tabloyu İndir</button>
+
+    <!-- Handsontable JS -->
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.js"></script>
+    <!-- XLSX Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
+    <!-- FileSaver.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <script>
+      // Handsontable tablosunu oluştur
+      var container = document.getElementById("hot");
+      var hot = new Handsontable(container, {
+        data: [[]],
+        colHeaders(col) {
+          switch (col) {
+            case 0:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                    GELİŞ TARİHİ<br>
+                    <span style="color: #388FCA;">ДАТА СОЗДАНИЕ ДОКУМЕНТА</span><br>
+                  </div>`;
+            case 1:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                    TALEP EDEN<br>
+                    <span style="color: #388FCA;">ИСПОЛНИТЕЛЬ</span>
+                  </div>`;
+            case 2:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>TALEP EDEN İLETİŞİM BİLGİLERİ</span><br>
+                        <span style="color: #388FCA;">КОНТАКТЫ ИСПОЛНИТЕЛЯ</span><br>
+                      </div>`;
+            case 3:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>AD</span><br>
+                        <span style="color: #388FCA;">ИМЯ</span><br>
+                      </div>`;
+            case 4:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>SOYAD</span><br>
+                        <span style="color: #388FCA;">ФАМИЛИЯ</span><br>
+                      </div>`;
+            case 5:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>TC/PAS. NO</span><br>
+                        <span style="color: #388FCA;">ТС/ЗАГРАН ПАСПОРТ</span><br>
+                      </div>`;
+            case 6:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>DOĞUM YERİ</span><br>
+                        <span style="color: #388FCA;">МЕСТО РОЖДЕНИЯ</span><br>
+                      </div>`;
+            case 7:
+              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>DOĞUM TARİHİ</span><br>
+                        <span style="color: #388FCA;">ДАТА РОЖДЕНИЯ</span><br>
+                      </div>`;
+          }
+        },
+        rowHeaders: true,
+        minRows: 5, // Minimum 5 satır
+        minCols: 20, // Minimum 5 sütun
+        licenseKey: "non-commercial-and-evaluation", // Lisans anahtarı
+        contextMenu: true, // Sağ tıklama menüsü etkin
+      });
+      // Tabloyu XLSX formatında indir
+      function exportToXLSX() {
+        var headers = hot.getColHeader();
+        headers.unshift("No");
+        var rows_data = hot.getData();
+        var data = Array();
+        data[0] = headers;
+        for (let i = 1; i < rows_data.length + 1; i++) {
+          rows_data[i - 1].unshift(i);
+          data[i] = rows_data[i - 1];
+        }
+        var wb = XLSX.utils.book_new();
+        var ws = XLSX.utils.aoa_to_sheet(data);
+
+        // Workbook'a worksheet ekleme
+        XLSX.utils.book_append_sheet(wb, ws, "PERSONEL LISTESI");
+
+        // Dosyayı kaydetme
+        XLSX.writeFile(wb, "PERSONEL GIRIS.xlsx");
+      }
+    </script>
+  </body>
+</html>
