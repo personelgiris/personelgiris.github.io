@@ -5,22 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Handsontable Example</title>
     <!-- Handsontable CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.css"
-      rel="stylesheet"
-    />
+    <link href="./css/handsontable.full.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
   </head>
   <body>
+    <style>
+      .centered {
+        position: absolute;
+        top: 150%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+    <div class="container"></div>
+    <div class="sticky-top">
+      <button class="btn btn-success" type="button">Excel İndir</button>
+    </div>
     <div id="hot"></div>
 
     <button onclick="exportToXLSX()">Tabloyu İndir</button>
 
     <!-- Handsontable JS -->
-    <script src="https://cdn.jsdelivr.net/npm/handsontable@9.0.0/dist/handsontable.full.min.js"></script>
-    <!-- XLSX Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
+    <script src="./js/handsontable.full.min.js"></script>
+    <!-- ExcelJS Library -->
+    <script src="./js/exceljs.min.js"></script>
     <!-- FileSaver.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="./js/FileSaver.min.js"></script>
+    <!-- Excel File -->
+    <script src="./js/excel_file.js"></script>
+    <script src="./js/company_list.js"></script>
+    <script src="./js/job_list.js"></script>
+    <script src="./js/country_list.js"></script>
+    <script src="./js/working_area.js"></script>
 
     <script>
       // Handsontable tablosunu oluştur
@@ -30,50 +46,206 @@
         colHeaders(col) {
           switch (col) {
             case 0:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                     GELİŞ TARİHİ<br>
                     <span style="color: #388FCA;">ДАТА СОЗДАНИЕ ДОКУМЕНТА</span><br>
+                    <span style="color: #388FCA;">ДОКУМЕНТА</span>
                   </div>`;
             case 1:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                     TALEP EDEN<br>
                     <span style="color: #388FCA;">ИСПОЛНИТЕЛЬ</span>
                   </div>`;
             case 2:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
-                        <span>TALEP EDEN İLETİŞİM BİLGİLERİ</span><br>
-                        <span style="color: #388FCA;">КОНТАКТЫ ИСПОЛНИТЕЛЯ</span><br>
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>TALEP EDEN</span><br>
+                        <span>İLETİŞİM BİLGİLERİ</span><br>
+                        <span style="color: #388FCA;">КОНТАКТЫ</span><br>
+                        <span style="color: #388FCA;">ИСПОЛНИТЕЛЯ</span>
                       </div>`;
             case 3:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                         <span>AD</span><br>
-                        <span style="color: #388FCA;">ИМЯ</span><br>
+                        <span style="color: #388FCA;">ИМЯ</span>
                       </div>`;
             case 4:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                         <span>SOYAD</span><br>
-                        <span style="color: #388FCA;">ФАМИЛИЯ</span><br>
+                        <span style="color: #388FCA;">ФАМИЛИЯ</span>
                       </div>`;
             case 5:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                         <span>TC/PAS. NO</span><br>
-                        <span style="color: #388FCA;">ТС/ЗАГРАН ПАСПОРТ</span><br>
+                        <span style="color: #388FCA;">TC/ЗАГРАН</span><br>
+                        <span style="color: #388FCA;">ПАСПОРТ</span>
                       </div>`;
             case 6:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                         <span>DOĞUM YERİ</span><br>
-                        <span style="color: #388FCA;">МЕСТО РОЖДЕНИЯ</span><br>
+                        <span style="color: #388FCA;">МЕСТО РОЖДЕНИЯ</span>
                       </div>`;
             case 7:
-              return `<div style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
                         <span>DOĞUM TARİHİ</span><br>
-                        <span style="color: #388FCA;">ДАТА РОЖДЕНИЯ</span><br>
+                        <span style="color: #388FCA;">ДАТА РОЖДЕНИЯ</span>
                       </div>`;
+            case 8:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>GÖREVİ</span><br>
+                        <span style="color: #388FCA;">ДОЛЖНОСТЬ</span>
+                      </div>`;
+            case 9:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>FİRMA</span><br>
+                        <span style="color: #388FCA;">ОРГАНИЗАЦИЯ</span>
+                      </div>`;
+            case 10:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>ÇALIŞTIĞI YER</span><br>
+                        <span style="color: #388FCA;">МЕСТО РАБОТЫ</span>
+                      </div>`;
+            case 11:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>CİNSİYET</span><br>
+                        <span style="color: #388FCA;">ПОЛ</span>
+                      </div>`;
+            case 12:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 12px; font-family: Calibri, sans-serif;">
+                        <span>ÇALIŞAN</span><br>
+                        <span>TELEFON NUMARASI</span><br>
+                        <span style="color: #388FCA;">НОМЕР</span><br>
+                        <span style="color: #388FCA;">ТЕЛЕФОНА РАБОЧЕГО</span>
+                      </div>`;
+            case 13:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 12px; font-family: Calibri, sans-serif;">
+                        <span>ÇALIŞAN YAKINI</span><br>
+                        <span>TELEFON NUMARASI</span><br>
+                        <span style="color: #388FCA;">НОМЕР ТЕЛЕФОНА</span><br>
+                        <span style="color: #388FCA;">БЛИЗКОГО ЧЕЛОВЕКА</span><br>
+                        <span style="color: #388FCA;">РАБОЧЕГО</span>
+                      </div>`;
+            case 14:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 12px; font-family: Calibri, sans-serif;">
+                        <span>ADLİ SİCİL KAYDI VE</span><br>
+                        <span>SAĞLIK KISITLAMALARI</span><br>
+                        <span style="color: #388FCA;">СПРАВКА О СУДИМОСТИ</span><br>
+                        <span style="color: #388FCA;">ОГРАНИЧЕНИЕ ПО</span><br>
+                        <span style="color: #388FCA;">ЗДОРОВЬЮ</span>
+                      </div>`;
+            case 15:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 14px; font-family: Calibri, sans-serif;">
+                        <span>UYRUK</span><br>
+                        <span style="color: #388FCA;">ГРАЖДАНСТВО</span>
+                      </div>`;
+            case 16:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 9px; font-family: Calibri, sans-serif;">
+                        <span>MAVİ KİMLİK NO / ÇALIŞMA İZNİ</span><br>
+                        <span>BAŞVURU NO</span><br>
+                        <span style="color: #FF0000;">(YABANCILAR İÇİN)</span><br>
+                        <span style="color: #388FCA;">СИНИЙ ИДЕНТИФИКАЦИОННЫЙ</span><br>
+                        <span style="color: #388FCA;">НОМЕР / НОМЕР ЗАЯВКИ НА РАЗРЕШЕНИЕ</span><br>
+                        <span style="color: #388FCA;">НА РАБОТУ</span><br>
+                        <span style="color: #FF0000;">(ДЛЯ ИНОСТРАНЦЕВ)</span>
+                      </div>`;
+            case 17:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 12px; font-family: Calibri, sans-serif;">
+              <span>ÇALIŞMA İZNİ BAŞVURU TARİHİ</span><br>
+              <span style="color: #FF0000;">(YABANCILAR İÇİN - GG.AA.YYYY)</span><br>
+              <span style="color: #388FCA;">ДАТА ПОДАЧИ РАЗРЕШЕНИЯ НА</span><br>
+              <span style="color: #388FCA;">РАБОТУ</span><br>
+              <span style="color: #FF0000;">(ДЛЯ ИНОСТРАНЦЕВ)</span>
+            </div>`;
+            case 18:
+              return `<div class="centered" style="text-align: center; font-weight: bold; font-size: 12px; font-family: Calibri, sans-serif;">
+              <span>ÇALIŞMA İZNİ BİTİŞ TARİHİ</span><br>
+              <span style="color: #FF0000;">(YABANCILAR İÇİN - GG.AA.YYYY)</span><br>
+              <span style="color: #388FCA;">ДАТА ОКОНЧАНИЯ РАЗРЕШЕНИЯ НА</span><br>
+              <span style="color: #388FCA;">РАБОТУ</span><br>
+              <span style="color: #FF0000;">(ДЛЯ ИНОСТРАНЦЕВ)</span>
+            </div>`;
           }
         },
+        colWidths: [
+          200, 125, 125, 125, 125, 125, 125, 125, 220, 220, 125, 100, 125, 125,
+          150, 125, 200, 200, 200,
+        ],
+        columnHeaderHeight: 75,
+        columns: [
+          {
+            type: "date",
+            dateFormat: "DD.MM.YYYY",
+            correctFormat: true,
+          },
+          {
+            type: "text",
+          },
+          {
+            type: "text",
+          },
+          {
+            type: "text",
+          },
+          {
+            type: "text",
+          },
+          {
+            type: "text",
+          },
+          {
+            type: "text",
+          },
+          {
+            type: "date",
+            dateFormat: "DD.MM.YYYY",
+            correctFormat: true,
+          },
+          {
+            type: "dropdown",
+            source: JOB_LIST,
+          },
+          {
+            type: "dropdown",
+            source: COMPANY_LIST,
+          },
+          {
+            type: "dropdown",
+            source: WORKING_AREA,
+          },
+          {
+            type: "dropdown",
+            source: ["ERKEK", "KADIN"],
+          },
+          {
+            type: "numeric",
+          },
+          {
+            type: "numeric",
+          },
+          {
+            type: "dropdown",
+            source: ["YOK", "VAR"],
+          },
+          {
+            type: "dropdown",
+            source: COUNTRY_LIST,
+          },
+          {
+            type: "numeric",
+          },
+          {
+            type: "date",
+            dateFormat: "DD.MM.YYYY",
+            correctFormat: true,
+          },
+          {
+            type: "date",
+            dateFormat: "DD.MM.YYYY",
+            correctFormat: true,
+          },
+        ],
         rowHeaders: true,
-        minRows: 5, // Minimum 5 satır
-        minCols: 20, // Minimum 5 sütun
+        minRows: 100, // Minimum 5 satır
+        minCols: 19, // Minimum 5 sütun
         licenseKey: "non-commercial-and-evaluation", // Lisans anahtarı
         contextMenu: true, // Sağ tıklama menüsü etkin
       });
@@ -98,5 +270,6 @@
         XLSX.writeFile(wb, "PERSONEL GIRIS.xlsx");
       }
     </script>
+    <script src="./js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
